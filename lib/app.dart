@@ -13,6 +13,7 @@ class TaskManagerApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       home: const MainNavBarScreen(),
+      initialRoute: MainNavBarScreen.name,
     );
   }
 }

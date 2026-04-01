@@ -2,6 +2,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:task_manager_apps/core/urls.dart';
 import 'package:task_manager_apps/data/service/api_caller.dart';
+import 'package:task_manager_apps/presentation/widgets/screen_background.dart';
 import 'package:task_manager_apps/presentation/widgets/snack_bar_message.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -26,123 +27,125 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Join With Us",
-                style: Theme.of(context).textTheme.titleLarge,
-                textAlign: TextAlign.start,
-              ),
-              const SizedBox(height: 40),
-              TextFormField(
-                controller: _emailController,
-                textInputAction: TextInputAction.next,
-                decoration: const InputDecoration(
-                  hintText: "Email",
-                  hintStyle: TextStyle(color: Colors.grey),
-                  prefixIcon: Icon(Icons.email_outlined, color: Colors.grey),
+      body: ScreenBackground(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Join With Us",
+                  style: Theme.of(context).textTheme.titleLarge,
+                  textAlign: TextAlign.start,
                 ),
-                validator: (String? value) {
-                  String inputText = value ?? "";
-                  if (EmailValidator.validate(inputText) == false) {
-                    return "Please enter a valid email";
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 15),
-              TextFormField(
-                controller: _firstNameController,
-                textInputAction: TextInputAction.next,
-                decoration: const InputDecoration(
-                  hintText: "First Name",
-                  hintStyle: TextStyle(color: Colors.grey),
-                  prefixIcon: Icon(Icons.person, color: Colors.grey),
-                ),
-                validator: (String? value) {
-                  String inputText = value ?? "";
-                  if (inputText.isEmpty) {
-                    return "Please enter first name";
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 15),
-              TextFormField(
-                controller: _lastNameController,
-                textInputAction: TextInputAction.next,
-                decoration: const InputDecoration(
-                  hintText: "Last Name",
-                  hintStyle: TextStyle(color: Colors.grey),
-                  prefixIcon: Icon(Icons.person, color: Colors.grey),
-                ),
-                validator: (String? value) {
-                  String inputText = value ?? "";
-                  if (inputText.isEmpty) {
-                    return "Please enter last name";
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 15),
-              TextFormField(
-                controller: _mobileController,
-                textInputAction: TextInputAction.next,
-                decoration: const InputDecoration(
-                  hintText: "Mobile Number",
-                  hintStyle: TextStyle(color: Colors.grey),
-                  prefixIcon: Icon(Icons.phone, color: Colors.grey),
-                ),
-                validator: (String? value) {
-                  String inputText = value ?? "";
-                  if (inputText.isEmpty) {
-                    return "Please enter mobile number";
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 15),
-              TextFormField(
-                controller: _passwordController,
-                textInputAction: TextInputAction.next,
-                decoration: const InputDecoration(
-                  hintText: "Password",
-                  hintStyle: TextStyle(color: Colors.grey),
-                  prefixIcon: Icon(Icons.lock, color: Colors.grey),
-                ),
-                validator: (String? value) {
-                  String inputText = value ?? "";
-                  if (inputText.isEmpty) {
-                    return "Please enter password";
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 15),
-              Visibility(
-                visible: _signUpInProgress == false,
-                replacement: Center(child: CircularProgressIndicator()),
-                child: FilledButton(
-                  onPressed: _onTapSignUpButton,
-                  child: Text("Sign Up"),
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("Already have an account?"),
-                  TextButton(
-                    onPressed: _onTapSignInButton,
-                    child: Text("Sign In"),
+                const SizedBox(height: 40),
+                TextFormField(
+                  controller: _emailController,
+                  textInputAction: TextInputAction.next,
+                  decoration: const InputDecoration(
+                    hintText: "Email",
+                    hintStyle: TextStyle(color: Colors.grey),
+                    prefixIcon: Icon(Icons.email_outlined, color: Colors.grey),
                   ),
-                ],
-              ),
-            ],
+                  validator: (String? value) {
+                    String inputText = value ?? "";
+                    if (EmailValidator.validate(inputText) == false) {
+                      return "Please enter a valid email";
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 15),
+                TextFormField(
+                  controller: _firstNameController,
+                  textInputAction: TextInputAction.next,
+                  decoration: const InputDecoration(
+                    hintText: "First Name",
+                    hintStyle: TextStyle(color: Colors.grey),
+                    prefixIcon: Icon(Icons.person, color: Colors.grey),
+                  ),
+                  validator: (String? value) {
+                    String inputText = value ?? "";
+                    if (inputText.isEmpty) {
+                      return "Please enter first name";
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 15),
+                TextFormField(
+                  controller: _lastNameController,
+                  textInputAction: TextInputAction.next,
+                  decoration: const InputDecoration(
+                    hintText: "Last Name",
+                    hintStyle: TextStyle(color: Colors.grey),
+                    prefixIcon: Icon(Icons.person, color: Colors.grey),
+                  ),
+                  validator: (String? value) {
+                    String inputText = value ?? "";
+                    if (inputText.isEmpty) {
+                      return "Please enter last name";
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 15),
+                TextFormField(
+                  controller: _mobileController,
+                  textInputAction: TextInputAction.next,
+                  decoration: const InputDecoration(
+                    hintText: "Mobile Number",
+                    hintStyle: TextStyle(color: Colors.grey),
+                    prefixIcon: Icon(Icons.phone, color: Colors.grey),
+                  ),
+                  validator: (String? value) {
+                    String inputText = value ?? "";
+                    if (inputText.isEmpty) {
+                      return "Please enter mobile number";
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 15),
+                TextFormField(
+                  controller: _passwordController,
+                  textInputAction: TextInputAction.next,
+                  decoration: const InputDecoration(
+                    hintText: "Password",
+                    hintStyle: TextStyle(color: Colors.grey),
+                    prefixIcon: Icon(Icons.lock, color: Colors.grey),
+                  ),
+                  validator: (String? value) {
+                    String inputText = value ?? "";
+                    if (inputText.isEmpty) {
+                      return "Please enter password";
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 15),
+                Visibility(
+                  visible: _signUpInProgress == false,
+                  replacement: Center(child: CircularProgressIndicator()),
+                  child: FilledButton(
+                    onPressed: _onTapSignUpButton,
+                    child: Text("Sign Up"),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Already have an account?"),
+                    TextButton(
+                      onPressed: _onTapSignInButton,
+                      child: Text("Sign In"),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

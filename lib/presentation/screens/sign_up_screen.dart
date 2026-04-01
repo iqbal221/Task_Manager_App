@@ -33,12 +33,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
           child: Form(
             key: _formKey,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   "Join With Us",
                   style: Theme.of(context).textTheme.titleLarge,
-                  textAlign: TextAlign.start,
                 ),
                 const SizedBox(height: 40),
                 TextFormField(
@@ -131,7 +131,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   replacement: Center(child: CircularProgressIndicator()),
                   child: FilledButton(
                     onPressed: _onTapSignUpButton,
-                    child: Text("Sign Up"),
+                    child: Text("Sign Up", style: TextStyle(fontSize: 16)),
                   ),
                 ),
                 Row(
@@ -140,7 +140,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Text("Already have an account?"),
                     TextButton(
                       onPressed: _onTapSignInButton,
-                      child: Text("Sign In"),
+                      child: Text("Log In"),
                     ),
                   ],
                 ),
@@ -152,7 +152,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  void _onTapSignInButton() {}
+  void _onTapSignInButton() {
+    Navigator.pop(context);
+  }
 
   void _onTapSignUpButton() {
     if (_formKey.currentState!.validate()) {

@@ -30,15 +30,16 @@ class TaskManagerApp extends StatelessWidget {
           style: FilledButton.styleFrom(
             backgroundColor: Colors.green,
             fixedSize: Size.fromWidth(double.maxFinite),
-            padding: EdgeInsets.symmetric(vertical: 12),
+            padding: EdgeInsets.symmetric(vertical: 14),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
           ),
         ),
       ),
-      initialRoute: SplashScreen.name,
+      initialRoute: SignUpScreen.name,
       routes: {
+        SplashScreen.name: (_) => SplashScreen(),
         MainNavBarScreen.name: (_) => MainNavBarScreen(),
         SignUpScreen.name: (_) => SignUpScreen(),
       },

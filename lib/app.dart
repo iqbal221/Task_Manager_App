@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:task_manager_apps/presentation/provider/login_provider.dart';
+import 'package:task_manager_apps/presentation/provider/new_task_list_provider.dart';
 import 'package:task_manager_apps/presentation/screens/add_new_task_screen.dart';
 import 'package:task_manager_apps/presentation/screens/login_screen.dart';
 import 'package:task_manager_apps/presentation/screens/main_nav_bar_screen.dart';
@@ -16,7 +17,10 @@ class TaskManagerApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider(create: (context) => LoginProvider())],
+      providers: [
+        ChangeNotifierProvider(create: (_) => LoginProvider()),
+        ChangeNotifierProvider(create: (_) => NewTaskListProvider()),
+      ],
       child: MaterialApp(
         navigatorKey: navigator,
         theme: ThemeData(

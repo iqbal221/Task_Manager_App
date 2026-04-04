@@ -3,7 +3,6 @@ class TaskModel {
   final String title;
   final String description;
   final String status;
-  final String email;
   final String createdAt;
 
   TaskModel({
@@ -11,18 +10,16 @@ class TaskModel {
     required this.title,
     required this.description,
     required this.status,
-    required this.email,
     required this.createdAt,
   });
 
-  factory TaskModel.fromJson(Map<String, dynamic> jsonData) {
+  factory TaskModel.fromJson(Map<String, dynamic> json) {
     return TaskModel(
-      id: jsonData['id'],
-      title: jsonData['title'],
-      description: jsonData['description'],
-      status: jsonData['status'],
-      email: jsonData['email'],
-      createdAt: jsonData['createdAt'],
+      id: json['_id'] ?? '',
+      title: json['title'] ?? '',
+      description: json['description'] ?? '',
+      status: json['status'] ?? '',
+      createdAt: json['createdDate'] ?? '', // 🔥 correct key
     );
   }
 }

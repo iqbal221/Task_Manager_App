@@ -28,8 +28,6 @@ class AuthController {
       String? userData = sharedPreferences.getString(_userDataKey);
       userModel = UserModel.fromJson(jsonDecode(userData!));
       accessToken = token;
-      print(userModel);
-      print(accessToken);
     }
   }
 }

@@ -7,6 +7,57 @@ import 'package:task_manager_apps/presentation/provider/auth_controller.dart';
 class ApiCaller {
   static final Logger _logger = Logger();
 
+  static Future<ApiResponse> getRequest({required String url}) async {
+    try {
+      Uri uri = Uri.parse(url);
+
+      print("TOKEN => ${AuthController.accessToken}");
+
+      _logRequest(url);
+      Response response = await get(
+        uri,
+        headers: {'token': AuthController.accessToken ?? ''},
+      );
+      _logResponse(url, response);
+
+      final int statusCode = response.statusCode;
+
+      if (statusCode == 200) {
+        // SUCCESS
+        final decodedData = jsonDecode(response.body);
+        return ApiResponse(
+          isSuccess: true,
+          responseCode: statusCode,
+          responseData: decodedData,
+        );
+      } else if (statusCode == 401) {
+        // await _moveToLogin();
+        return ApiResponse(
+          isSuccess: false,
+          responseCode: statusCode,
+          errorMessage: 'Un-authorize',
+          responseData: null,
+        );
+      } else {
+        // FAILED
+        final decodedData = jsonDecode(response.body);
+        return ApiResponse(
+          isSuccess: false,
+          responseCode: statusCode,
+          responseData: decodedData,
+          errorMessage: decodedData['data'],
+        );
+      }
+    } on Exception catch (e) {
+      return ApiResponse(
+        isSuccess: false,
+        responseCode: -1,
+        responseData: null,
+        errorMessage: e.toString(),
+      );
+    }
+  }
+
   static Future<ApiResponse> postRequest({
     required String url,
     required Map<String, dynamic> body,

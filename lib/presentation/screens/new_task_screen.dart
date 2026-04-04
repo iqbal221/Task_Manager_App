@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:task_manager_apps/presentation/provider/new_task_list_provider.dart';
 import 'package:task_manager_apps/presentation/screens/add_new_task_screen.dart';
+import '../widgets/task_card.dart';
 
 class NewTaskScreen extends StatefulWidget {
   const NewTaskScreen({super.key});
@@ -10,71 +13,54 @@ class NewTaskScreen extends StatefulWidget {
 
 class _NewTaskScreenState extends State<NewTaskScreen> {
   @override
+  void initState() {
+    super.initState();
+
+    context.read<NewTaskListProvider>().getNewTaskList();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SizedBox(
-        height: 210,
-        child: Card(
-          margin: EdgeInsets.all(16),
-          elevation: 2,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              spacing: 6,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'New Task',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 22,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Text("description", style: TextStyle(fontSize: 16)),
-                Text(
-                  "date",
-                  style: TextStyle(color: Colors.black, fontSize: 18),
-                ),
-                Row(
-                  children: [
-                    Chip(
-                      label: Text("status"),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      backgroundColor: Colors.blue,
-                      labelStyle: TextStyle(color: Colors.white),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 2),
+        child: Column(
+          children: [
+            Expanded(
+              child: Consumer<NewTaskListProvider>(
+                builder: (context, newTaskListProvider, _) {
+                  return Visibility(
+                    visible: newTaskListProvider.newTaskListInProgress == false,
+                    replacement: Center(child: CircularProgressIndicator()),
+                    child: ListView.separated(
+                      itemCount: newTaskListProvider.newTaskList.length,
+                      itemBuilder: (context, index) {
+                        return TaskCard(
+                          task: newTaskListProvider.newTaskList[index],
+                        );
+                      },
+                      separatorBuilder: (context, index) {
+                        return SizedBox(height: 2);
+                      },
                     ),
-                    Spacer(),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.edit, color: Colors.grey),
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.delete, color: Colors.red),
-                    ),
-                  ],
-                ),
-              ],
+                  );
+                },
+              ),
             ),
-          ),
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _onTapAddNewTaskButton,
+        onPressed: _onTapAddNewTask,
         child: Icon(Icons.add),
       ),
     );
   }
 
-  void _onTapAddNewTaskButton() {
+  void _onTapAddNewTask() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => AddNewTaskScreen()),
+      MaterialPageRoute(builder: (context) => const AddNewTaskScreen()),
     );
   }
 }

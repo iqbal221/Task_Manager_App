@@ -21,98 +21,88 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordTEController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  bool _loginInProgress = false;
-
-  final LoginProvider _loginProvider = LoginProvider();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ChangeNotifierProvider(
-        create: (context) => _loginProvider,
-        child: ScreenBackground(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Get Started With',
-                    style: Theme.of(context).textTheme.titleLarge,
+      body: ScreenBackground(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Get Started With',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                const SizedBox(height: 40),
+                TextFormField(
+                  controller: _emailTEController,
+                  decoration: InputDecoration(
+                    hintText: 'Email',
+                    hintStyle: TextStyle(color: Colors.grey),
+                    prefixIcon: Icon(Icons.email_outlined, color: Colors.grey),
                   ),
-                  const SizedBox(height: 40),
-                  TextFormField(
-                    controller: _emailTEController,
-                    decoration: InputDecoration(
-                      hintText: 'Email',
-                      hintStyle: TextStyle(color: Colors.grey),
-                      prefixIcon: Icon(
-                        Icons.email_outlined,
-                        color: Colors.grey,
+                  validator: (String? value) {
+                    String inputText = value ?? '';
+                    if (EmailValidator.validate(inputText) == false) {
+                      return 'Enter a valid email';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 15),
+                TextFormField(
+                  controller: _passwordTEController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    hintText: 'Password',
+                    hintStyle: TextStyle(color: Colors.grey),
+                    prefixIcon: Icon(Icons.lock, color: Colors.grey),
+                  ),
+                  validator: (String? value) {
+                    if ((value?.length ?? 0) <= 6) {
+                      return 'Password should more than 6 letters';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 15),
+                Consumer<LoginProvider>(
+                  builder: (context, loginProvider, _) {
+                    return Visibility(
+                      visible: loginProvider.loginInProgress == false,
+                      replacement: Center(child: CircularProgressIndicator()),
+                      child: FilledButton(
+                        onPressed: _onTapLoginButton,
+                        child: Text("Log In", style: TextStyle(fontSize: 16)),
                       ),
-                    ),
-                    validator: (String? value) {
-                      String inputText = value ?? '';
-                      if (EmailValidator.validate(inputText) == false) {
-                        return 'Enter a valid email';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 15),
-                  TextFormField(
-                    controller: _passwordTEController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      hintText: 'Password',
-                      hintStyle: TextStyle(color: Colors.grey),
-                      prefixIcon: Icon(Icons.lock, color: Colors.grey),
-                    ),
-                    validator: (String? value) {
-                      if ((value?.length ?? 0) <= 6) {
-                        return 'Password should more than 6 letters';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 15),
-                  Consumer<LoginProvider>(
-                    builder: (context, loginProvider, child) {
-                      if (loginProvider.loginInProgess == true) {
-                        return Center(child: CircularProgressIndicator());
-                      } else {
-                        return FilledButton(
-                          onPressed: _onTapLoginButton,
-                          child: Text("Log In", style: TextStyle(fontSize: 16)),
-                        );
-                      }
-                    },
-                  ),
-                  const SizedBox(height: 10),
-                  Center(
-                    child: TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        'Forgot Password?',
-                        style: TextStyle(color: Colors.grey),
-                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 10),
+                Center(
+                  child: TextButton(
+                    onPressed: () {},
+                    child: Text(
+                      'Forgot Password?',
+                      style: TextStyle(color: Colors.grey),
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("Don't have an account?"),
-                      TextButton(
-                        onPressed: _onTapSignUpButton,
-                        child: Text("Sign Up"),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Don't have an account?"),
+                    TextButton(
+                      onPressed: _onTapSignUpButton,
+                      child: Text("Sign Up"),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ),
@@ -139,23 +129,19 @@ class _LoginScreenState extends State<LoginScreen> {
       "password": _passwordTEController.text.trim(),
     };
 
-    final bool isSuccess = await _loginProvider.login(requestBody);
+    final provider = context.read<LoginProvider>();
+
+    final bool isSuccess = await provider.login(requestBody);
 
     if (isSuccess) {
-      _onTapClearText();
       Navigator.pushNamedAndRemoveUntil(
         context,
         MainNavBarScreen.name,
         (predict) => false,
       );
     } else {
-      showSnackBarMessage(context, _loginProvider.errorMessage!);
+      showSnackBarMessage(context, provider.errorMessage!);
     }
-  }
-
-  void _onTapClearText() {
-    _emailTEController.clear();
-    _passwordTEController.clear();
   }
 
   @override

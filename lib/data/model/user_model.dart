@@ -6,6 +6,10 @@ class UserModel {
   final String mobile;
   final String photo;
 
+  String get fullName {
+    return '$firstName $lastName';
+  }
+
   UserModel({
     required this.id,
     required this.email,

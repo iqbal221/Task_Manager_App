@@ -1,16 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager_apps/core/urls.dart';
 import 'package:task_manager_apps/data/model/task_model.dart';
+import 'package:task_manager_apps/data/service/api_caller.dart';
+import 'package:task_manager_apps/presentation/widgets/data_format.dart';
+import 'package:task_manager_apps/presentation/widgets/snack_bar_message.dart';
+import 'package:task_manager_apps/presentation/widgets/status_colors.dart';
 
 class TaskCard extends StatefulWidget {
-  const TaskCard({super.key, required this.task});
+  const TaskCard({
+    super.key,
+    required this.task,
+    required this.refreshTaskList,
+  });
 
   final TaskModel task;
+  final VoidCallback refreshTaskList;
 
   @override
   State<TaskCard> createState() => _TaskCardState();
 }
 
 class _TaskCardState extends State<TaskCard> {
+  bool _deleteInProgress = false;
+  bool _changeStatusInProgress = false;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -23,7 +36,7 @@ class _TaskCardState extends State<TaskCard> {
           padding: const EdgeInsets.all(12),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            spacing: 8,
+            spacing: 10,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
@@ -36,27 +49,43 @@ class _TaskCardState extends State<TaskCard> {
               ),
               Text(widget.task.description, style: TextStyle(fontSize: 16)),
               Text(
-                widget.task.createdAt,
-                style: TextStyle(color: Colors.black, fontSize: 18),
+                formatDate(widget.task.createdAt),
+                style: TextStyle(color: Colors.black, fontSize: 16),
               ),
+
               Row(
                 children: [
                   Chip(
-                    label: Text(widget.task.status),
+                    label: Text(
+                      widget.task.status,
+                      style: TextStyle(color: Colors.white),
+                    ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24),
                     ),
-                    backgroundColor: Colors.blue,
-                    labelStyle: TextStyle(color: Colors.white),
+                    backgroundColor: StatusColors.getStatusColor(
+                      widget.task.status,
+                    ),
                   ),
                   Spacer(),
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.edit, color: Colors.grey),
+                  Visibility(
+                    visible: _changeStatusInProgress == false,
+                    replacement: CircularProgressIndicator(),
+                    child: IconButton(
+                      onPressed: () {
+                        _showChangeStatusDialog();
+                      },
+                      icon: Icon(Icons.edit),
+                      color: Colors.grey,
+                    ),
                   ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.delete, color: Colors.red),
+                  Visibility(
+                    visible: _deleteInProgress == false,
+                    replacement: Center(child: CircularProgressIndicator()),
+                    child: IconButton(
+                      onPressed: _deleteTask,
+                      icon: Icon(Icons.delete, color: Colors.red),
+                    ),
                   ),
                 ],
               ),
@@ -65,5 +94,94 @@ class _TaskCardState extends State<TaskCard> {
         ),
       ),
     );
+  }
+
+  void _showChangeStatusDialog() {
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        return AlertDialog(
+          title: Text('Change Status'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                onTap: () {
+                  _changeStatus('New');
+                },
+                title: Text('New'),
+                trailing: widget.task.status == 'New' ? Icon(Icons.done) : null,
+              ),
+              ListTile(
+                onTap: () {
+                  _changeStatus('Progress');
+                },
+                title: Text('Progress'),
+                trailing: widget.task.status == 'Progress'
+                    ? Icon(Icons.done)
+                    : null,
+              ),
+              ListTile(
+                onTap: () {
+                  _changeStatus('Cancelled');
+                },
+                title: Text('Cancelled'),
+                trailing: widget.task.status == 'Cancelled'
+                    ? Icon(Icons.done)
+                    : null,
+              ),
+              ListTile(
+                onTap: () {
+                  _changeStatus('Completed');
+                },
+                title: Text('Completed'),
+                trailing: widget.task.status == 'Completed'
+                    ? Icon(Icons.done)
+                    : null,
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _changeStatus(String status) async {
+    if (status == widget.task.status) {
+      return;
+    }
+
+    Navigator.pop(context);
+
+    _changeStatusInProgress = true;
+    setState(() {});
+    final ApiResponse response = await ApiCaller.getRequest(
+      url: Urls.updateTaskStatusUrl(widget.task.id, status),
+    );
+    _changeStatusInProgress = false;
+    setState(() {});
+    if (response.isSuccess) {
+      widget.refreshTaskList();
+    } else {
+      showSnackBarMessage(context, response.errorMessage!);
+    }
+  }
+
+  void _deleteTask() async {
+    _deleteInProgress = true;
+    setState(() {});
+
+    final ApiResponse response = await ApiCaller.getRequest(
+      url: Urls.deleteTaskUrl(widget.task.id),
+    );
+
+    _deleteInProgress = false;
+    setState(() {});
+
+    if (response.isSuccess) {
+      widget.refreshTaskList();
+    } else {
+      showSnackBarMessage(context, response.errorMessage!);
+    }
   }
 }

@@ -3,6 +3,7 @@ import 'package:task_manager_apps/presentation/screens/cancelled_task_screen.dar
 import 'package:task_manager_apps/presentation/screens/completed_task_screen.dart';
 import 'package:task_manager_apps/presentation/screens/new_task_screen.dart';
 import 'package:task_manager_apps/presentation/screens/progress_task_screen.dart';
+import 'package:task_manager_apps/presentation/widgets/tm_appbar.dart';
 
 class MainNavBarScreen extends StatefulWidget {
   const MainNavBarScreen({super.key});
@@ -19,14 +20,14 @@ class _MainNavBarScreenState extends State<MainNavBarScreen> {
   final List<Widget> _screens = [
     NewTaskScreen(),
     ProgressTaskScreen(),
-    CompletedTaskScreen(),
     CancelledTaskScreen(),
+    CompletedTaskScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Main Nav Bar Screen')),
+      appBar: TMAppbar(),
       body: _screens[_selectedIndex],
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedIndex,

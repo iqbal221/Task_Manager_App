@@ -7,6 +7,7 @@ import 'package:task_manager_apps/presentation/screens/login_screen.dart';
 import 'package:task_manager_apps/presentation/screens/main_nav_bar_screen.dart';
 import 'package:task_manager_apps/presentation/screens/sign_up_screen.dart';
 import 'package:task_manager_apps/presentation/screens/splash_screen.dart';
+import 'package:task_manager_apps/presentation/screens/update_profile_screen.dart';
 
 class TaskManagerApp extends StatelessWidget {
   const TaskManagerApp({super.key});
@@ -54,6 +55,7 @@ class TaskManagerApp extends StatelessWidget {
           LoginScreen.name: (_) => LoginScreen(),
           SignUpScreen.name: (_) => SignUpScreen(),
           AddNewTaskScreen.name: (_) => AddNewTaskScreen(),
+          UpdateProfileScreen.name: (_) => UpdateProfileScreen(),
         },
       ),
     );

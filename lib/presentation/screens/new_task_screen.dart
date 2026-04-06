@@ -23,7 +23,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 2),
+        padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 10),
         child: Column(
           children: [
             Expanded(
@@ -37,6 +37,11 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                       itemBuilder: (context, index) {
                         return TaskCard(
                           task: newTaskListProvider.newTaskList[index],
+                          refreshTaskList: () {
+                            context
+                                .read<NewTaskListProvider>()
+                                .getNewTaskList();
+                          },
                         );
                       },
                       separatorBuilder: (context, index) {

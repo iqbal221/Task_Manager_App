@@ -33,7 +33,7 @@ class _TaskCardState extends State<TaskCard> {
       child: Card(
         color: Colors.white,
         margin: EdgeInsets.zero,
-        elevation: 2,
+        elevation: 1,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         child: Padding(
           padding: const EdgeInsets.all(12),

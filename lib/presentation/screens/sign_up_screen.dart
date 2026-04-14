@@ -44,6 +44,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 TextFormField(
                   controller: _emailController,
                   textInputAction: TextInputAction.next,
+                  style: const TextStyle(color: Colors.black),
                   decoration: const InputDecoration(
                     hintText: "Email",
                     hintStyle: TextStyle(color: Colors.grey),
@@ -61,6 +62,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 TextFormField(
                   controller: _firstNameController,
                   textInputAction: TextInputAction.next,
+                  style: const TextStyle(color: Colors.black),
                   decoration: const InputDecoration(
                     hintText: "First Name",
                     hintStyle: TextStyle(color: Colors.grey),
@@ -78,6 +80,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 TextFormField(
                   controller: _lastNameController,
                   textInputAction: TextInputAction.next,
+                  style: const TextStyle(color: Colors.black),
                   decoration: const InputDecoration(
                     hintText: "Last Name",
                     hintStyle: TextStyle(color: Colors.grey),
@@ -95,6 +98,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 TextFormField(
                   controller: _mobileController,
                   textInputAction: TextInputAction.next,
+                  style: const TextStyle(color: Colors.black),
                   decoration: const InputDecoration(
                     hintText: "Mobile Number",
                     hintStyle: TextStyle(color: Colors.grey),
@@ -112,6 +116,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 TextFormField(
                   controller: _passwordController,
                   textInputAction: TextInputAction.next,
+                  style: const TextStyle(color: Colors.black),
                   decoration: const InputDecoration(
                     hintText: "Password",
                     hintStyle: TextStyle(color: Colors.grey),
@@ -168,8 +173,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     Map<String, dynamic> requestBody = {
       "email": _emailController.text.trim(),
-      "first_name": _firstNameController.text.trim(),
-      "last_name": _lastNameController.text.trim(),
+      "firstName": _firstNameController.text.trim(),
+      "lastName": _lastNameController.text.trim(),
       "mobile": _mobileController.text.trim(),
       "password": _passwordController.text.trim(),
     };

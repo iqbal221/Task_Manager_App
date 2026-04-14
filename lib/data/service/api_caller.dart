@@ -11,8 +11,6 @@ class ApiCaller {
     try {
       Uri uri = Uri.parse(url);
 
-      print("TOKEN => ${AuthController.accessToken}");
-
       _logRequest(url);
       Response response = await get(
         uri,

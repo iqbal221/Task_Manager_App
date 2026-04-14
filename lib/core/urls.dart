@@ -1,18 +1,19 @@
 class Urls {
-  static const String _baseUrl = 'http://35.73.30.144:2005/api/v1';
+  static const String _baseUrl =
+      'https://task-manager-backend-flutter.vercel.app/api/v1';
 
-  static const String registrationUrl = '$_baseUrl/Registration';
-  static const String loginUrl = '$_baseUrl/Login';
-  static const String addNewTaskUrl = '$_baseUrl/createTask';
-  static const String newTaskListUrl = '$_baseUrl/listTaskByStatus/New';
+  static const String registrationUrl = '$_baseUrl/users/createUser';
+  static const String loginUrl = '$_baseUrl/auth/login';
+  static const String addNewTaskUrl = '$_baseUrl/getAllTask/createTask';
+  static const String newTaskListUrl = '$_baseUrl/getAllTask/status/New';
   static const String progressTaskListUrl =
-      '$_baseUrl/listTaskByStatus/Progress';
+      '$_baseUrl/getAllTask/status/Progress';
   static const String cancelledTaskListUrl =
-      '$_baseUrl/listTaskByStatus/Cancelled';
+      '$_baseUrl/getAllTask/status/Cancelled';
   static const String completedTaskListUrl =
-      '$_baseUrl/listTaskByStatus/Completed';
-  static String deleteTaskUrl(String id) => '$_baseUrl/deleteTask/$id';
+      '$_baseUrl/getAllTask/status/Completed';
+  static String deleteTaskUrl(String id) => '$_baseUrl/getAllTask/$id';
   static String updateTaskStatusUrl(String id, String newStatus) =>
-      '$_baseUrl/updateTaskStatus/$id/$newStatus';
-  static const String updateProfileUrl = '$_baseUrl/ProfileUpdate';
+      '$_baseUrl/getAllTask/$id/$newStatus';
+  static const String updateProfileUrl = '$_baseUrl/users/profileUpdate';
 }

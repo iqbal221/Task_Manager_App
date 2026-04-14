@@ -35,13 +35,19 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                     child: ListView.separated(
                       itemCount: newTaskListProvider.newTaskList.length,
                       itemBuilder: (context, index) {
-                        return TaskCard(
-                          task: newTaskListProvider.newTaskList[index],
-                          refreshTaskList: () {
-                            context
-                                .read<NewTaskListProvider>()
-                                .getNewTaskList();
-                          },
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 8,
+                          ),
+                          child: TaskCard(
+                            task: newTaskListProvider.newTaskList[index],
+                            refreshTaskList: () {
+                              context
+                                  .read<NewTaskListProvider>()
+                                  .getNewTaskList();
+                            },
+                          ),
                         );
                       },
                       separatorBuilder: (context, index) {

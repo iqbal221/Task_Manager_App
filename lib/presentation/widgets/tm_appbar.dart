@@ -1,7 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:task_manager_apps/core/app_colors.dart';
 import 'package:task_manager_apps/presentation/provider/auth_controller.dart';
+import 'package:task_manager_apps/presentation/provider/theme_provider.dart';
 import 'package:task_manager_apps/presentation/screens/login_screen.dart';
 import 'package:task_manager_apps/presentation/screens/update_profile_screen.dart';
 
@@ -18,49 +21,57 @@ class TMAppbar extends StatefulWidget implements PreferredSizeWidget {
 class _TMAppbarState extends State<TMAppbar> {
   @override
   Widget build(BuildContext context) {
-    final photoProfile = AuthController.userModel!.photo;
+    final photoProfile = AuthController.userModel?.photo ?? '';
 
-    return AppBar(
-      backgroundColor: Colors.green,
-      title: GestureDetector(
-        onTap: _updateProfile,
-        child: Row(
-          spacing: 8,
-          children: [
-            CircleAvatar(
-              child: photoProfile.isNotEmpty
-                  ? Image.memory(jsonDecode(photoProfile))
-                  : Icon(Icons.person),
-            ),
+    return Consumer<ThemeProvider>(
+      builder: (context, themeProvider, _) {
+        return AppBar(
+          backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
 
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          title: GestureDetector(
+            onTap: _updateProfile,
+            child: Row(
               children: [
-                Text(
-                  AuthController.userModel!.email,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleSmall?.copyWith(color: Colors.white),
+                CircleAvatar(
+                  child: photoProfile.isNotEmpty
+                      ? Image.memory(base64Decode(photoProfile))
+                      : const Icon(Icons.person),
                 ),
-                Text(
-                  AuthController.userModel!.fullName,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleSmall?.copyWith(color: Colors.white),
+                const SizedBox(width: 8),
+
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      AuthController.userModel?.email ?? '',
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                    Text(
+                      AuthController.userModel?.fullName ?? '',
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                  ],
                 ),
               ],
             ),
+          ),
+
+          actions: [
+            IconButton(
+              icon: Icon(
+                themeProvider.themeMode == ThemeMode.dark
+                    ? Icons.light_mode
+                    : Icons.dark_mode,
+              ),
+              onPressed: () {
+                themeProvider.toggleTheme();
+              },
+            ),
+
+            IconButton(onPressed: _signOut, icon: const Icon(Icons.logout)),
           ],
-        ),
-      ),
-      actions: [
-        IconButton(
-          onPressed: () {
-            _signOut();
-          },
-          icon: Icon(Icons.logout),
-        ),
-      ],
+        );
+      },
     );
   }
 

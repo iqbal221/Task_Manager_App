@@ -28,7 +28,7 @@ class _CompletedTaskScreenState extends State<CompletedTaskScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 2),
+        padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 10),
         child: Column(
           children: [
             Expanded(
@@ -40,11 +40,17 @@ class _CompletedTaskScreenState extends State<CompletedTaskScreen> {
                     child: ListView.separated(
                       itemCount: _completedTaskList.length,
                       itemBuilder: (context, index) {
-                        return TaskCard(
-                          task: _completedTaskList[index],
-                          refreshTaskList: () {
-                            _getAllCompletedTasks();
-                          },
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 8,
+                          ),
+                          child: TaskCard(
+                            task: _completedTaskList[index],
+                            refreshTaskList: () {
+                              _getAllCompletedTasks();
+                            },
+                          ),
                         );
                       },
                       separatorBuilder: (context, index) {

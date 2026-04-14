@@ -40,6 +40,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 40),
                 TextFormField(
                   controller: _emailTEController,
+                  textInputAction: TextInputAction.next,
+                  style: const TextStyle(color: Colors.black),
                   decoration: InputDecoration(
                     hintText: 'Email',
                     hintStyle: TextStyle(color: Colors.grey),
@@ -57,6 +59,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 TextFormField(
                   controller: _passwordTEController,
                   obscureText: true,
+                  textInputAction: TextInputAction.next,
+                  style: const TextStyle(color: Colors.black),
                   decoration: InputDecoration(
                     hintText: 'Password',
                     hintStyle: TextStyle(color: Colors.grey),
@@ -140,7 +144,10 @@ class _LoginScreenState extends State<LoginScreen> {
         (predict) => false,
       );
     } else {
-      showSnackBarMessage(context, provider.errorMessage!);
+      showSnackBarMessage(
+        context,
+        provider.errorMessage ?? "Something went wrong",
+      );
     }
   }
 

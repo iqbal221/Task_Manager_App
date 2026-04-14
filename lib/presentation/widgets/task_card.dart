@@ -26,10 +26,13 @@ class _TaskCardState extends State<TaskCard> {
 
   @override
   Widget build(BuildContext context) {
+    final statusColor = StatusColors.getStatusColor(widget.task.status);
+
     return SizedBox(
-      height: 210,
+      height: 205,
       child: Card(
-        margin: EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+        color: Colors.white,
+        margin: EdgeInsets.zero,
         elevation: 2,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         child: Padding(
@@ -41,13 +44,12 @@ class _TaskCardState extends State<TaskCard> {
             children: [
               Text(
                 widget.task.title,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 22,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: Theme.of(context).textTheme.displayLarge,
               ),
-              Text(widget.task.description, style: TextStyle(fontSize: 16)),
+              Text(
+                widget.task.description,
+                style: Theme.of(context).textTheme.displaySmall,
+              ),
               Text(
                 formatDate(widget.task.createdAt),
                 style: TextStyle(color: Colors.black, fontSize: 16),
@@ -58,14 +60,13 @@ class _TaskCardState extends State<TaskCard> {
                   Chip(
                     label: Text(
                       widget.task.status,
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                     ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24),
+                      side: BorderSide(color: statusColor), // ✅ border color
                     ),
-                    backgroundColor: StatusColors.getStatusColor(
-                      widget.task.status,
-                    ),
+                    backgroundColor: statusColor, // ✅ same color
                   ),
                   Spacer(),
                   Visibility(
@@ -180,6 +181,7 @@ class _TaskCardState extends State<TaskCard> {
 
     if (response.isSuccess) {
       widget.refreshTaskList();
+      showSnackBarMessage(context, "Task Deleted Successfully");
     } else {
       showSnackBarMessage(context, response.errorMessage!);
     }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager_apps/core/urls.dart';
 import 'package:task_manager_apps/data/service/api_caller.dart';
-import 'package:task_manager_apps/presentation/provider/auth_controller.dart';
 import 'package:task_manager_apps/presentation/screens/main_nav_bar_screen.dart';
 import 'package:task_manager_apps/presentation/widgets/screen_background.dart';
 import 'package:task_manager_apps/presentation/widgets/snack_bar_message.dart';
@@ -44,8 +43,12 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                   const SizedBox(height: 16),
                   TextFormField(
                     controller: _titleTEController,
+                    style: const TextStyle(color: Colors.black), // 👈 FIX
                     textInputAction: TextInputAction.next,
-                    decoration: InputDecoration(hintText: 'Title'),
+                    decoration: InputDecoration(
+                      hintText: 'Title',
+                      hintStyle: TextStyle(color: Colors.grey),
+                    ),
                     validator: (String? value) {
                       if (value?.trim().isEmpty ?? true) {
                         return 'Enter your title';
@@ -56,8 +59,12 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                   const SizedBox(height: 8),
                   TextFormField(
                     controller: _descriptionTEController,
+                    style: const TextStyle(color: Colors.black), // 👈 FIX
                     maxLines: 6,
-                    decoration: InputDecoration(hintText: 'Description'),
+                    decoration: InputDecoration(
+                      hintText: 'Description',
+                      hintStyle: TextStyle(color: Colors.grey),
+                    ),
                     validator: (String? value) {
                       if (value?.trim().isEmpty ?? true) {
                         return 'Enter your description';
@@ -99,7 +106,6 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
       "status": "New",
     };
 
-    print("TOKEN => ${AuthController.accessToken}");
     final ApiResponse response = await ApiCaller.postRequest(
       url: Urls.addNewTaskUrl,
       body: requestBody,

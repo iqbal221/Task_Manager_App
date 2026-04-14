@@ -28,7 +28,7 @@ class _ProgressTaskScreenState extends State<ProgressTaskScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 2),
+        padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 10),
         child: Column(
           children: [
             Expanded(
@@ -40,11 +40,17 @@ class _ProgressTaskScreenState extends State<ProgressTaskScreen> {
                     child: ListView.separated(
                       itemCount: _progressTaskList.length,
                       itemBuilder: (context, index) {
-                        return TaskCard(
-                          task: _progressTaskList[index],
-                          refreshTaskList: () {
-                            _getAllProgressTasks();
-                          },
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 8,
+                          ),
+                          child: TaskCard(
+                            task: _progressTaskList[index],
+                            refreshTaskList: () {
+                              _getAllProgressTasks();
+                            },
+                          ),
                         );
                       },
                       separatorBuilder: (context, index) {

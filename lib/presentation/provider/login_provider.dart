@@ -22,9 +22,10 @@ class LoginProvider extends ChangeNotifier {
       body: requestBody,
     );
 
-    if (response.isSuccess && response.responseData['status'] == 'success') {
+    if (response.responseData["statusCode"] == 200 &&
+        response.responseData['success'] == true) {
       UserModel userData = UserModel.fromJson(response.responseData["data"]);
-      String token = response.responseData["token"];
+      String token = response.responseData["data"]["token"];
       await AuthController.saveUserData(userData, token);
       _errorMessage = null;
       isSuccess = true;

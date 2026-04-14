@@ -3,23 +3,23 @@ class TaskModel {
   final String title;
   final String description;
   final String status;
-  final String createdAt;
+  final String? createdAt;
 
   TaskModel({
     required this.id,
     required this.title,
     required this.description,
     required this.status,
-    required this.createdAt,
+    this.createdAt,
   });
 
   factory TaskModel.fromJson(Map<String, dynamic> json) {
     return TaskModel(
-      id: json['_id'] ?? '',
+      id: json['id'] ?? json['_id'] ?? "",
       title: json['title'] ?? '',
       description: json['description'] ?? '',
       status: json['status'] ?? '',
-      createdAt: json['createdDate'] ?? '', // 🔥 correct key
+      createdAt: json['createdAt'] ?? '', // 🔥 correct key
     );
   }
 }

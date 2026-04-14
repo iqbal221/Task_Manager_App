@@ -69,13 +69,23 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                   const SizedBox(height: 8),
                   TextFormField(
                     controller: _emailTEController,
-                    decoration: InputDecoration(hintText: 'Email'),
+                    textInputAction: TextInputAction.next,
+                    style: const TextStyle(color: Colors.black),
+                    decoration: InputDecoration(
+                      hintText: 'Email',
+                      hintStyle: TextStyle(color: Colors.grey),
+                    ),
                     enabled: false,
                   ),
                   const SizedBox(height: 8),
                   TextFormField(
                     controller: _firstNameTEController,
-                    decoration: InputDecoration(hintText: 'First name'),
+                    textInputAction: TextInputAction.next,
+                    style: const TextStyle(color: Colors.black),
+                    decoration: InputDecoration(
+                      hintText: 'First name',
+                      hintStyle: TextStyle(color: Colors.grey),
+                    ),
                     validator: (String? value) {
                       if (value?.trim().isEmpty ?? true) {
                         return 'Enter your first name';
@@ -86,7 +96,12 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                   const SizedBox(height: 8),
                   TextFormField(
                     controller: _lastNameTEController,
-                    decoration: InputDecoration(hintText: 'Last name'),
+                    textInputAction: TextInputAction.next,
+                    style: const TextStyle(color: Colors.black),
+                    decoration: InputDecoration(
+                      hintText: 'Last name',
+                      hintStyle: TextStyle(color: Colors.grey),
+                    ),
                     validator: (String? value) {
                       if (value?.trim().isEmpty ?? true) {
                         return 'Enter your first name';
@@ -97,7 +112,12 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                   const SizedBox(height: 8),
                   TextFormField(
                     controller: _mobileTEController,
-                    decoration: InputDecoration(hintText: 'Mobile'),
+                    textInputAction: TextInputAction.next,
+                    style: const TextStyle(color: Colors.black),
+                    decoration: InputDecoration(
+                      hintText: 'Mobile',
+                      hintStyle: TextStyle(color: Colors.grey),
+                    ),
                     validator: (String? value) {
                       if (value?.trim().isEmpty ?? true) {
                         return 'Enter your first name';
@@ -109,8 +129,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                   TextFormField(
                     controller: _passwordTEController,
                     obscureText: true,
+                    textInputAction: TextInputAction.next,
+                    style: const TextStyle(color: Colors.black),
                     decoration: InputDecoration(
                       hintText: 'Password (Optional)',
+                      hintStyle: TextStyle(color: Colors.grey),
                     ),
                     validator: (String? value) {
                       if ((value != null && value.isNotEmpty) &&

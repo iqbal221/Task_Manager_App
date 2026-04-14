@@ -28,7 +28,7 @@ class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 2),
+        padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 10),
         child: Column(
           children: [
             Expanded(
@@ -40,11 +40,17 @@ class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
                     child: ListView.separated(
                       itemCount: _cancelledTaskList.length,
                       itemBuilder: (context, index) {
-                        return TaskCard(
-                          task: _cancelledTaskList[index],
-                          refreshTaskList: () {
-                            _getAllCancelledTasks();
-                          },
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 8,
+                          ),
+                          child: TaskCard(
+                            task: _cancelledTaskList[index],
+                            refreshTaskList: () {
+                              _getAllCancelledTasks();
+                            },
+                          ),
                         );
                       },
                       separatorBuilder: (context, index) {

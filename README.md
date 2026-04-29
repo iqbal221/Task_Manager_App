@@ -14,10 +14,8 @@ Manage your daily tasks efficiently with clean UI and real-time updates.</p>
 ✅ REST API Integration</br>
 
 
-🛠️ Tech Stack</br>
-
 📊 Task Status System</br>
-Each task has one of the following statuses:
+Each task has one of the following statuses:</br>
 🟢 New</br>
 🔵 Progress</br>
 ✅ Completed</br>

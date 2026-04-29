@@ -2,7 +2,7 @@
 
 <p>A simple, fast, and modern Task Management Mobile App built with Flutter and powered by an Express.js + MongoDB backend.
 Manage your daily tasks efficiently with clean UI and real-time updates.</p>
-................
+
 🚀 Features</br>
 ✅ User Authentication (Login / Signup)</br>
 ✅ Create New Tasks</br>
@@ -14,16 +14,15 @@ Manage your daily tasks efficiently with clean UI and real-time updates.</p>
 ✅ REST API Integration</br>
 🛠️ Tech Stack</br>
 
-................
-📊 Task Status System
+📊 Task Status System</br>
+
 Each task has one of the following statuses:
+🟢 New</br>
+🔵 Progress</br>
+✅ Completed</br>
+❌ Cancelled</br>
 
-🟢 New
-🔵 Progress
-✅ Completed
-❌ Cancelled
-
-Dashboard shows task count like:
+Dashboard shows task count like:</br>
 
 [
   { "status": "New", "count": 2 },
@@ -31,40 +30,35 @@ Dashboard shows task count like:
   { "status": "Completed", "count": 0 },
   { "status": "Cancelled", "count": 1 }
 ]
-
-.......................
-🛠️ Tech Stack
+</br>
+🛠️ Tech Stack</br>
 📱 Frontend
-Flutter
-Provider (State Management)
+Flutter</br>
+Provider (State Management)</br>
 REST API Integration
 
-🌐 Backend
-Node.js
-Express.js
-MongoDB
-Mongoose
-............
-⚙️ Installation Guide
-1️⃣ Clone Repository
+🌐 Backend</br>
+Node.js</br>
+Express.js</br>
+MongoDB</br>
+Mongoose</br>
+
+⚙️ Installation Guide</br>
+1️⃣ Clone Repository</br>
 git clone https://github.com/your-username/task-manager-app.git
-2️⃣ Install Dependencies
-flutter pub get
-3️⃣ Run App
+2️⃣ Install Dependencies</br>
+flutter pub get</br>
+3️⃣ Run App</br>
 flutter run
-
-........................
+</br>
 🔗 API Configuration
+Update your API base URL:</br>
+Urls.baseUrl = "http://YOUR_IP:5000/api/v1";</br>
 
-Update your API base URL:
-
-Urls.baseUrl = "http://YOUR_IP:5000/api/v1";
-📌 Important Notes
-📱 Android Emulator → 10.0.2.2
-
-📱 Physical Device → Use your PC IP
+📌 Important Notes</br>
+📱 Android Emulator → 10.0.2.2</br>
+📱 Physical Device → Use your PC IP</br>
 Example:
-
-http://192.168.1.100:5000/api/v1
-📦 Build Release APK
+http://192.168.1.100:5000/api/v1</br>
+📦 Build Release APK</br>
 flutter build apk --release

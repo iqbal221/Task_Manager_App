@@ -12,10 +12,11 @@ Manage your daily tasks efficiently with clean UI and real-time updates.</p>
 ✅ Clean & Responsive UI</br>
 ✅ Dark Mode Support 🌙</br>
 ✅ REST API Integration</br>
+
+
 🛠️ Tech Stack</br>
 
 📊 Task Status System</br>
-
 Each task has one of the following statuses:
 🟢 New</br>
 🔵 Progress</br>
@@ -23,14 +24,14 @@ Each task has one of the following statuses:
 ❌ Cancelled</br>
 
 Dashboard shows task count like:</br>
-
 [
-  { "status": "New", "count": 2 },
-  { "status": "Progress", "count": 1 },
-  { "status": "Completed", "count": 0 },
-  { "status": "Cancelled", "count": 1 }
+  { "status": "New", "count": 2 },</br>
+  { "status": "Progress", "count": 1 },</br>
+  { "status": "Completed", "count": 0 },</br>
+  { "status": "Cancelled", "count": 1 }</br>
 ]
 </br>
+
 🛠️ Tech Stack</br>
 📱 Frontend
 Flutter</br>
@@ -45,12 +46,13 @@ Mongoose</br>
 
 ⚙️ Installation Guide</br>
 1️⃣ Clone Repository</br>
-git clone https://github.com/your-username/task-manager-app.git
+git clone https://github.com/your-username/task-manager-app.git</br>
 2️⃣ Install Dependencies</br>
 flutter pub get</br>
 3️⃣ Run App</br>
 flutter run
 </br>
+
 🔗 API Configuration
 Update your API base URL:</br>
 Urls.baseUrl = "http://YOUR_IP:5000/api/v1";</br>

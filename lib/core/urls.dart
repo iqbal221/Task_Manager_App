@@ -1,6 +1,5 @@
 class Urls {
-  static const String _baseUrl =
-      'https://task-manager-backend-flutter.vercel.app/api/v1';
+  static const String _baseUrl = 'https://task-manager-backend-flutter.vercel.app/api/v1';
 
   static const String registrationUrl = '$_baseUrl/users/createUser';
   static const String loginUrl = '$_baseUrl/auth/login';
@@ -16,4 +15,6 @@ class Urls {
   static String updateTaskStatusUrl(String id, String newStatus) =>
       '$_baseUrl/getAllTask/$id/$newStatus';
   static const String updateProfileUrl = '$_baseUrl/users/profileUpdate';
+  static const String taskStatusCountUrl =
+      '$_baseUrl/getAllTask/taskStatusCount';
 }

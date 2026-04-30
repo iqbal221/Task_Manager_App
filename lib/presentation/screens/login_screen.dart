@@ -102,7 +102,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     Text("Don't have an account?"),
                     TextButton(
                       onPressed: _onTapSignUpButton,
-                      child: Text("Sign Up"),
+                      child: Text(
+                        "Sign Up",
+                        style: TextStyle(
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? Colors.pink
+                              : Colors.green,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -144,10 +152,7 @@ class _LoginScreenState extends State<LoginScreen> {
         (predict) => false,
       );
     } else {
-      showSnackBarMessage(
-        context,
-        provider.errorMessage ?? "Something went wrong",
-      );
+      showSnackBarMessage(context, provider.errorMessage ?? "User not found");
     }
   }
 

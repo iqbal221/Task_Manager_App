@@ -6,8 +6,8 @@ class TaskStatusCountModel {
 
   factory TaskStatusCountModel.fromJson(Map<String, dynamic> jsonData) {
     return TaskStatusCountModel(
-      status: jsonData['_id'],
-      count: jsonData['sum'],
+      status: jsonData['status'],
+      count: jsonData['count'],
     );
   }
 }

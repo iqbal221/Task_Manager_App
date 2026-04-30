@@ -86,11 +86,12 @@ class ApiCaller {
           errorMessage: null,
         );
       } else {
+        final decodedBody = jsonDecode(response.body);
         return ApiResponse(
           isSuccess: false,
           responseCode: statusCode,
           responseData: null,
-          errorMessage: 'Request failed with status code $statusCode',
+          errorMessage: decodedBody['message'] ?? "Something went wrong",
         );
       }
     } on Exception catch (e) {

@@ -145,7 +145,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Text("Already have an account?"),
                     TextButton(
                       onPressed: _onTapSignInButton,
-                      child: Text("Log In"),
+                      child: Text(
+                        "Log In",
+                        style: TextStyle(
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? Colors.pink
+                              : Colors.green,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                   ],
                 ),

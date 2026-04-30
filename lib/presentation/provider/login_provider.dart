@@ -25,12 +25,14 @@ class LoginProvider extends ChangeNotifier {
     if (response.responseData["statusCode"] == 200 &&
         response.responseData['success'] == true) {
       UserModel userData = UserModel.fromJson(response.responseData["data"]);
-      String token = response.responseData["data"]["token"];
+      String token = response.responseData?["data"]["token"];
       await AuthController.saveUserData(userData, token);
       _errorMessage = null;
       isSuccess = true;
-    } else {
-      _errorMessage = response.errorMessage;
+    } else if (response.responseData["statusCode"] == 500 &&
+        response.responseData['success'] == false) {
+      String? message = response.responseData?["message"];
+      _errorMessage = message ?? "User not found";
     }
 
     _loginInProgress = false;

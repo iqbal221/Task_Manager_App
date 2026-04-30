@@ -14,6 +14,19 @@ Manage your daily tasks efficiently with clean UI and real-time updates.</p>
 ✅ REST API Integration</br>
 
 
+## 📸 Screenshots
+
+### 🏠 Home Screen (Unit Selection)
+<p>
+  <img src="https://github.com/iqbal221/unit_converter/blob/main/home.png"
+</p>
+
+### 🔄 Conversion Screen
+<p>
+  <img src="https://github.com/iqbal221/unit_converter/blob/main/conversion.png"
+</p>
+
+
 📊 Task Status System</br>
 Each task has one of the following statuses:</br>
 🟢 New</br>

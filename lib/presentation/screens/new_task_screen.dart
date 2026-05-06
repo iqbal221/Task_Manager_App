@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:task_manager_apps/core/urls.dart';
-import 'package:task_manager_apps/data/model/task_status_count_model.dart';
-import 'package:task_manager_apps/data/service/api_caller.dart';
-import 'package:task_manager_apps/presentation/provider/new_task_list_provider.dart';
-import 'package:task_manager_apps/presentation/screens/add_new_task_screen.dart';
-import 'package:task_manager_apps/presentation/widgets/snack_bar_message.dart';
-import 'package:task_manager_apps/presentation/widgets/task_count_status_card.dart';
+import 'package:task_pilot/core/urls.dart';
+import 'package:task_pilot/data/model/task_status_count_model.dart';
+import 'package:task_pilot/data/service/api_caller.dart';
+import 'package:task_pilot/presentation/provider/auth_controller.dart';
+import 'package:task_pilot/presentation/provider/new_task_list_provider.dart';
+import 'package:task_pilot/presentation/screens/add_new_task_screen.dart';
+import 'package:task_pilot/presentation/widgets/empty_task.dart';
+import 'package:task_pilot/presentation/widgets/snack_bar_message.dart';
+import 'package:task_pilot/presentation/widgets/task_count_status_card.dart';
 import '../widgets/task_card.dart';
 
 class NewTaskScreen extends StatefulWidget {
@@ -23,6 +25,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   @override
   void initState() {
     super.initState();
+
     _getAllTaskStatusCount();
     context.read<NewTaskListProvider>().getNewTaskList();
   }
@@ -30,18 +33,54 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   Future<void> _getAllTaskStatusCount() async {
     _getTaskStatusCountInProgress = true;
     setState(() {});
+
     final ApiResponse response = await ApiCaller.getRequest(
       url: Urls.taskStatusCountUrl,
     );
-    if (response.isSuccess) {
-      List<TaskStatusCountModel> list = [];
-      for (Map<String, dynamic> jsonData in response.responseData['data']) {
-        list.add(TaskStatusCountModel.fromJson(jsonData));
+
+    // ✅ Default statuses (always shown)
+    final List<String> allStatuses = [
+      "New",
+      "Progress",
+      "Completed",
+      "Cancelled",
+    ];
+
+    Map<String, int> statusMap = {};
+
+    if (response.isSuccess &&
+        response.responseData != null &&
+        response.responseData['data'] != null) {
+      for (var item in response.responseData['data']) {
+        statusMap[item['status']] = item['count'];
       }
-      _taskStatusCountList = list;
-    } else {
-      showSnackBarMessage(context, response.errorMessage!);
     }
+
+    // ✅ Always build full list with default 0
+    _taskStatusCountList = allStatuses.map((status) {
+      return TaskStatusCountModel(
+        status: status,
+        count: statusMap[status] ?? 0,
+      );
+    }).toList();
+
+    if (response.isSuccess &&
+        response.responseData != null &&
+        response.responseData['data'] != null) {
+      // List<TaskStatusCountModel> list = [];
+
+      // for (Map<String, dynamic> jsonData in response.responseData['data']) {
+      //   list.add(TaskStatusCountModel.fromJson(jsonData));
+      // }
+
+      // _taskStatusCountList = list;
+    } else {
+      showSnackBarMessage(
+        context,
+        response.errorMessage ?? "Failed to load status count",
+      );
+    }
+
     _getTaskStatusCountInProgress = false;
     setState(() {});
   }
@@ -82,34 +121,40 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
             Expanded(
               child: Consumer<NewTaskListProvider>(
                 builder: (context, newTaskListProvider, _) {
-                  return Visibility(
-                    visible: newTaskListProvider.newTaskListInProgress == false,
-                    replacement: Center(child: CircularProgressIndicator()),
-                    child: ListView.separated(
-                      itemCount: newTaskListProvider.newTaskList.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 8,
-                          ),
-                          child: TaskCard(
-                            task: newTaskListProvider.newTaskList[index],
-                            refreshTaskList: () {
-                              context
-                                  .read<NewTaskListProvider>()
-                                  .getNewTaskList();
-                              _getAllTaskStatusCount();
-                            },
-                          ),
-                        );
-                      },
-                      separatorBuilder: (context, index) {
-                        return SizedBox(height: 2);
-                      },
-                    ),
+                  if (newTaskListProvider.newTaskListInProgress) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+
+                  // ✅ EMPTY STATE UI
+                  if (newTaskListProvider.newTaskList.isEmpty) {
+                    return EmptyTask();
+                  }
+
+                  return ListView.separated(
+                    itemCount: newTaskListProvider.newTaskList.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 8,
+                        ),
+                        child: TaskCard(
+                          task: newTaskListProvider.newTaskList[index],
+                          refreshTaskList: () {
+                            context
+                                .read<NewTaskListProvider>()
+                                .getNewTaskList();
+                            _getAllTaskStatusCount();
+                          },
+                        ),
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return SizedBox(height: 2);
+                    },
                   );
                 },
+                // ...
               ),
             ),
           ],

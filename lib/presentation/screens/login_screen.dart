@@ -1,11 +1,11 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:task_manager_apps/presentation/provider/login_provider.dart';
-import 'package:task_manager_apps/presentation/screens/main_nav_bar_screen.dart';
-import 'package:task_manager_apps/presentation/screens/sign_up_screen.dart';
-import 'package:task_manager_apps/presentation/widgets/screen_background.dart';
-import 'package:task_manager_apps/presentation/widgets/snack_bar_message.dart';
+import 'package:task_pilot/presentation/provider/login_provider.dart';
+import 'package:task_pilot/presentation/screens/main_nav_bar_screen.dart';
+import 'package:task_pilot/presentation/screens/sign_up_screen.dart';
+import 'package:task_pilot/presentation/widgets/screen_background.dart';
+import 'package:task_pilot/presentation/widgets/snack_bar_message.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -77,7 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Consumer<LoginProvider>(
                   builder: (context, loginProvider, _) {
                     return Visibility(
-                      visible: loginProvider.loginInProgress == false,
+                      visible: !loginProvider.loginInProgress,
                       replacement: Center(child: CircularProgressIndicator()),
                       child: FilledButton(
                         onPressed: _onTapLoginButton,

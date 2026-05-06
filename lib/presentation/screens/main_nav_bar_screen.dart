@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:task_manager_apps/presentation/screens/cancelled_task_screen.dart';
-import 'package:task_manager_apps/presentation/screens/completed_task_screen.dart';
-import 'package:task_manager_apps/presentation/screens/new_task_screen.dart';
-import 'package:task_manager_apps/presentation/screens/progress_task_screen.dart';
-import 'package:task_manager_apps/presentation/widgets/tm_appbar.dart';
+import 'package:task_pilot/presentation/screens/cancelled_task_screen.dart';
+import 'package:task_pilot/presentation/screens/completed_task_screen.dart';
+import 'package:task_pilot/presentation/screens/new_task_screen.dart';
+import 'package:task_pilot/presentation/screens/progress_task_screen.dart';
+import 'package:task_pilot/presentation/widgets/tm_appbar.dart';
 
 class MainNavBarScreen extends StatefulWidget {
   const MainNavBarScreen({super.key});

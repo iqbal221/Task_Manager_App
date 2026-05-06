@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:task_manager_apps/core/urls.dart';
-import 'package:task_manager_apps/data/model/task_model.dart';
-import 'package:task_manager_apps/data/service/api_caller.dart';
-import 'package:task_manager_apps/presentation/widgets/data_format.dart';
-import 'package:task_manager_apps/presentation/widgets/snack_bar_message.dart';
-import 'package:task_manager_apps/presentation/widgets/status_colors.dart';
+import 'package:task_pilot/core/urls.dart';
+import 'package:task_pilot/data/model/task_model.dart';
+import 'package:task_pilot/data/service/api_caller.dart';
+import 'package:task_pilot/presentation/provider/auth_controller.dart';
+import 'package:task_pilot/presentation/widgets/data_format.dart';
+import 'package:task_pilot/presentation/widgets/snack_bar_message.dart';
+import 'package:task_pilot/presentation/widgets/status_colors.dart';
 
 class TaskCard extends StatefulWidget {
   const TaskCard({
@@ -148,23 +149,41 @@ class _TaskCardState extends State<TaskCard> {
   }
 
   Future<void> _changeStatus(String status) async {
-    if (status == widget.task.status) {
-      return;
-    }
+    if (status == widget.task.status) return;
 
     Navigator.pop(context);
 
     _changeStatusInProgress = true;
     setState(() {});
+
+    await AuthController.getUserData();
+    String? accessToken = AuthController.accessToken;
+
+    if (accessToken == null) {
+      showSnackBarMessage(context, "User not logged in");
+      _changeStatusInProgress = false;
+      setState(() {});
+      return;
+    }
+
     final ApiResponse response = await ApiCaller.getRequest(
       url: Urls.updateTaskStatusUrl(widget.task.id, status),
+      // headers: {
+      //   "Content-Type": "application/json",
+      //   "Authorization": "Bearer $accessToken", // ✅ important
+      // },
     );
+
     _changeStatusInProgress = false;
     setState(() {});
+
     if (response.isSuccess) {
       widget.refreshTaskList();
     } else {
-      showSnackBarMessage(context, response.errorMessage!);
+      showSnackBarMessage(
+        context,
+        response.errorMessage ?? "Failed to update status",
+      );
     }
   }
 
@@ -183,7 +202,10 @@ class _TaskCardState extends State<TaskCard> {
       widget.refreshTaskList();
       showSnackBarMessage(context, "Task Deleted Successfully");
     } else {
-      showSnackBarMessage(context, response.errorMessage!);
+      showSnackBarMessage(
+        context,
+        response.errorMessage ?? "Failed to delete task",
+      );
     }
   }
 }

@@ -1,21 +1,27 @@
 import 'dart:convert';
-
 import 'package:http/http.dart';
 import 'package:logger/logger.dart';
-import 'package:task_manager_apps/presentation/provider/auth_controller.dart';
+import 'package:task_pilot/presentation/provider/auth_controller.dart';
 
 class ApiCaller {
   static final Logger _logger = Logger();
 
-  static Future<ApiResponse> getRequest({required String url}) async {
+  static Future<ApiResponse> getRequest({
+    required String url,
+    Map<String, String>? headers,
+  }) async {
     try {
       Uri uri = Uri.parse(url);
 
+      headers ??= {"Content-Type": "application/json"};
+
+      final token = AuthController.accessToken;
+      if (token != null) {
+        headers["Authorization"] = "Bearer $token";
+      }
+
       _logRequest(url);
-      Response response = await get(
-        uri,
-        headers: {'token': AuthController.accessToken ?? ''},
-      );
+      Response response = await get(uri, headers: headers);
       _logResponse(url, response);
 
       final int statusCode = response.statusCode;
@@ -59,18 +65,23 @@ class ApiCaller {
   static Future<ApiResponse> postRequest({
     required String url,
     required Map<String, dynamic> body,
+    Map<String, String>? headers,
   }) async {
     try {
       Uri uri = Uri.parse(url);
+
+      headers ??= {"Content-Type": "application/json"};
+
+      final token = AuthController.accessToken;
+      if (token != null) {
+        headers["Authorization"] = "Bearer $token";
+      }
 
       _logRequest(url, body: body);
 
       Response response = await post(
         uri,
-        headers: {
-          'content-type': "application/json",
-          'token': AuthController.accessToken ?? '',
-        },
+        headers: headers,
         body: jsonEncode(body),
       );
 

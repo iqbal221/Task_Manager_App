@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:task_manager_apps/core/urls.dart';
-import 'package:task_manager_apps/data/model/task_model.dart';
-import 'package:task_manager_apps/data/service/api_caller.dart';
-import 'package:task_manager_apps/presentation/provider/new_task_list_provider.dart';
-import 'package:task_manager_apps/presentation/widgets/snack_bar_message.dart';
+
+import 'package:task_pilot/core/urls.dart';
+import 'package:task_pilot/data/model/task_model.dart';
+import 'package:task_pilot/data/service/api_caller.dart';
+import 'package:task_pilot/presentation/widgets/empty_task.dart';
+
+import 'package:task_pilot/presentation/widgets/snack_bar_message.dart';
 import '../widgets/task_card.dart';
 
 class CompletedTaskScreen extends StatefulWidget {
@@ -32,12 +33,11 @@ class _CompletedTaskScreenState extends State<CompletedTaskScreen> {
         child: Column(
           children: [
             Expanded(
-              child: Consumer<NewTaskListProvider>(
-                builder: (context, newTaskListProvider, _) {
-                  return Visibility(
-                    visible: __completedTaskInProgress == false,
-                    replacement: Center(child: CircularProgressIndicator()),
-                    child: ListView.separated(
+              child: __completedTaskInProgress
+                  ? Center(child: CircularProgressIndicator())
+                  : _completedTaskList.isEmpty
+                  ? EmptyTask()
+                  : ListView.separated(
                       itemCount: _completedTaskList.length,
                       itemBuilder: (context, index) {
                         return Padding(
@@ -57,9 +57,6 @@ class _CompletedTaskScreenState extends State<CompletedTaskScreen> {
                         return SizedBox(height: 2);
                       },
                     ),
-                  );
-                },
-              ),
             ),
           ],
         ),
@@ -70,18 +67,28 @@ class _CompletedTaskScreenState extends State<CompletedTaskScreen> {
   Future<void> _getAllCompletedTasks() async {
     __completedTaskInProgress = true;
     setState(() {});
+
     final ApiResponse response = await ApiCaller.getRequest(
       url: Urls.completedTaskListUrl,
     );
-    if (response.isSuccess) {
+
+    if (response.isSuccess &&
+        response.responseData != null &&
+        response.responseData['data'] != null) {
       List<TaskModel> list = [];
+
       for (Map<String, dynamic> jsonData in response.responseData['data']) {
         list.add(TaskModel.fromJson(jsonData));
       }
+
       _completedTaskList = list;
     } else {
-      showSnackBarMessage(context, response.errorMessage!);
+      showSnackBarMessage(
+        context,
+        response.errorMessage ?? "Something went wrong",
+      );
     }
+
     __completedTaskInProgress = false;
     setState(() {});
   }

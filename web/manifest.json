@@ -1,6 +1,6 @@
 {
-    "name": "task_manager_apps",
-    "short_name": "task_manager_apps",
+    "name": "task_pilot",
+    "short_name": "task_pilot",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

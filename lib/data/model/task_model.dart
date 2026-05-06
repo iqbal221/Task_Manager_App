@@ -3,6 +3,7 @@ class TaskModel {
   final String title;
   final String description;
   final String status;
+  final String email;
   final String? createdAt;
 
   TaskModel({
@@ -10,6 +11,7 @@ class TaskModel {
     required this.title,
     required this.description,
     required this.status,
+    required this.email,
     this.createdAt,
   });
 
@@ -19,7 +21,8 @@ class TaskModel {
       title: json['title'] ?? '',
       description: json['description'] ?? '',
       status: json['status'] ?? '',
-      createdAt: json['createdAt'] ?? '', // 🔥 correct key
+      email: json['email'] ?? '',
+      createdAt: json['createdAt'],
     );
   }
 }

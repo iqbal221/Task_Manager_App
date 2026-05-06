@@ -2,11 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:task_manager_apps/core/app_colors.dart';
-import 'package:task_manager_apps/presentation/provider/auth_controller.dart';
-import 'package:task_manager_apps/presentation/provider/theme_provider.dart';
-import 'package:task_manager_apps/presentation/screens/login_screen.dart';
-import 'package:task_manager_apps/presentation/screens/update_profile_screen.dart';
+import 'package:task_pilot/core/app_colors.dart';
+import 'package:task_pilot/presentation/provider/auth_controller.dart';
+import 'package:task_pilot/presentation/provider/theme_provider.dart';
+import 'package:task_pilot/presentation/screens/login_screen.dart';
+import 'package:task_pilot/presentation/screens/update_profile_screen.dart';
 
 class TMAppbar extends StatefulWidget implements PreferredSizeWidget {
   const TMAppbar({super.key});

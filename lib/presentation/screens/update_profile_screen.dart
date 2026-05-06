@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:task_manager_apps/core/urls.dart';
-import 'package:task_manager_apps/data/model/user_model.dart';
-import 'package:task_manager_apps/data/service/api_caller.dart';
-import 'package:task_manager_apps/presentation/provider/auth_controller.dart';
-import 'package:task_manager_apps/presentation/widgets/screen_background.dart';
-import 'package:task_manager_apps/presentation/widgets/snack_bar_message.dart';
-import 'package:task_manager_apps/presentation/widgets/tm_appbar.dart';
+import 'package:task_pilot/core/urls.dart';
+import 'package:task_pilot/data/model/user_model.dart';
+import 'package:task_pilot/data/service/api_caller.dart';
+import 'package:task_pilot/presentation/provider/auth_controller.dart';
+import 'package:task_pilot/presentation/widgets/screen_background.dart';
+import 'package:task_pilot/presentation/widgets/snack_bar_message.dart';
+import 'package:task_pilot/presentation/widgets/tm_appbar.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({super.key});
@@ -172,6 +172,18 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     _updateProfileInProgress = true;
     setState(() {});
 
+    // ✅ Load user data first
+    await AuthController.getUserData();
+
+    String? accessToken = AuthController.accessToken;
+
+    if (accessToken == null) {
+      showSnackBarMessage(context, "User not logged in");
+      _updateProfileInProgress = false;
+      setState(() {});
+      return;
+    }
+
     final Map<String, dynamic> requestBody = {
       "email": _emailTEController.text,
       "firstName": _firstNameTEController.text.trim(),
@@ -194,6 +206,10 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     final ApiResponse response = await ApiCaller.postRequest(
       url: Urls.updateProfileUrl,
       body: requestBody,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken", // ✅ important
+      },
     );
 
     _updateProfileInProgress = false;

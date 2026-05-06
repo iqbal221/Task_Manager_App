@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:task_manager_apps/core/urls.dart';
-import 'package:task_manager_apps/data/model/task_model.dart';
-import 'package:task_manager_apps/data/service/api_caller.dart';
-import 'package:task_manager_apps/presentation/provider/new_task_list_provider.dart';
-import 'package:task_manager_apps/presentation/widgets/snack_bar_message.dart';
+import 'package:task_pilot/core/urls.dart';
+import 'package:task_pilot/data/model/task_model.dart';
+import 'package:task_pilot/data/service/api_caller.dart';
+import 'package:task_pilot/presentation/widgets/empty_task.dart';
+import 'package:task_pilot/presentation/widgets/snack_bar_message.dart';
 import '../widgets/task_card.dart';
 
 class CancelledTaskScreen extends StatefulWidget {
@@ -32,12 +31,11 @@ class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
         child: Column(
           children: [
             Expanded(
-              child: Consumer<NewTaskListProvider>(
-                builder: (context, newTaskListProvider, _) {
-                  return Visibility(
-                    visible: _getCancelledTaskInProgress == false,
-                    replacement: Center(child: CircularProgressIndicator()),
-                    child: ListView.separated(
+              child: _getCancelledTaskInProgress
+                  ? Center(child: CircularProgressIndicator())
+                  : _cancelledTaskList.isEmpty
+                  ? EmptyTask()
+                  : ListView.separated(
                       itemCount: _cancelledTaskList.length,
                       itemBuilder: (context, index) {
                         return Padding(
@@ -57,9 +55,6 @@ class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
                         return SizedBox(height: 2);
                       },
                     ),
-                  );
-                },
-              ),
             ),
           ],
         ),
@@ -70,18 +65,23 @@ class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
   Future<void> _getAllCancelledTasks() async {
     _getCancelledTaskInProgress = true;
     setState(() {});
+
     final ApiResponse response = await ApiCaller.getRequest(
       url: Urls.cancelledTaskListUrl,
     );
+
     if (response.isSuccess) {
       List<TaskModel> list = [];
+
       for (Map<String, dynamic> jsonData in response.responseData['data']) {
         list.add(TaskModel.fromJson(jsonData));
       }
+
       _cancelledTaskList = list;
     } else {
       showSnackBarMessage(context, response.errorMessage!);
     }
+
     _getCancelledTaskInProgress = false;
     setState(() {});
   }

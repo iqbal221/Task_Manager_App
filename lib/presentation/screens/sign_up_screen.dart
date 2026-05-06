@@ -1,9 +1,10 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:task_manager_apps/core/urls.dart';
-import 'package:task_manager_apps/data/service/api_caller.dart';
-import 'package:task_manager_apps/presentation/widgets/screen_background.dart';
-import 'package:task_manager_apps/presentation/widgets/snack_bar_message.dart';
+import 'package:task_pilot/core/urls.dart';
+import 'package:task_pilot/data/service/api_caller.dart';
+import 'package:task_pilot/presentation/provider/auth_controller.dart';
+import 'package:task_pilot/presentation/widgets/screen_background.dart';
+import 'package:task_pilot/presentation/widgets/snack_bar_message.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -28,136 +29,145 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ScreenBackground(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Join With Us",
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const SizedBox(height: 40),
-                TextFormField(
-                  controller: _emailController,
-                  textInputAction: TextInputAction.next,
-                  style: const TextStyle(color: Colors.black),
-                  decoration: const InputDecoration(
-                    hintText: "Email",
-                    hintStyle: TextStyle(color: Colors.grey),
-                    prefixIcon: Icon(Icons.email_outlined, color: Colors.grey),
-                  ),
-                  validator: (String? value) {
-                    String inputText = value ?? "";
-                    if (EmailValidator.validate(inputText) == false) {
-                      return "Please enter a valid email";
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 15),
-                TextFormField(
-                  controller: _firstNameController,
-                  textInputAction: TextInputAction.next,
-                  style: const TextStyle(color: Colors.black),
-                  decoration: const InputDecoration(
-                    hintText: "First Name",
-                    hintStyle: TextStyle(color: Colors.grey),
-                    prefixIcon: Icon(Icons.person, color: Colors.grey),
-                  ),
-                  validator: (String? value) {
-                    String inputText = value ?? "";
-                    if (inputText.isEmpty) {
-                      return "Please enter first name";
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 15),
-                TextFormField(
-                  controller: _lastNameController,
-                  textInputAction: TextInputAction.next,
-                  style: const TextStyle(color: Colors.black),
-                  decoration: const InputDecoration(
-                    hintText: "Last Name",
-                    hintStyle: TextStyle(color: Colors.grey),
-                    prefixIcon: Icon(Icons.person, color: Colors.grey),
-                  ),
-                  validator: (String? value) {
-                    String inputText = value ?? "";
-                    if (inputText.isEmpty) {
-                      return "Please enter last name";
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 15),
-                TextFormField(
-                  controller: _mobileController,
-                  textInputAction: TextInputAction.next,
-                  style: const TextStyle(color: Colors.black),
-                  decoration: const InputDecoration(
-                    hintText: "Mobile Number",
-                    hintStyle: TextStyle(color: Colors.grey),
-                    prefixIcon: Icon(Icons.phone, color: Colors.grey),
-                  ),
-                  validator: (String? value) {
-                    String inputText = value ?? "";
-                    if (inputText.isEmpty) {
-                      return "Please enter mobile number";
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 15),
-                TextFormField(
-                  controller: _passwordController,
-                  textInputAction: TextInputAction.next,
-                  style: const TextStyle(color: Colors.black),
-                  decoration: const InputDecoration(
-                    hintText: "Password",
-                    hintStyle: TextStyle(color: Colors.grey),
-                    prefixIcon: Icon(Icons.lock, color: Colors.grey),
-                  ),
-                  validator: (String? value) {
-                    String inputText = value ?? "";
-                    if (inputText.isEmpty) {
-                      return "Please enter password";
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 15),
-                Visibility(
-                  visible: _signUpInProgress == false,
-                  replacement: Center(child: CircularProgressIndicator()),
-                  child: FilledButton(
-                    onPressed: _onTapSignUpButton,
-                    child: Text("Sign Up", style: TextStyle(fontSize: 16)),
-                  ),
-                ),
-                Row(
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Already have an account?"),
-                    TextButton(
-                      onPressed: _onTapSignInButton,
-                      child: Text(
-                        "Log In",
-                        style: TextStyle(
-                          color: Theme.of(context).brightness == Brightness.dark
-                              ? Colors.pink
-                              : Colors.green,
-                          fontWeight: FontWeight.w600,
+                    Text(
+                      "Join With Us",
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    const SizedBox(height: 40),
+                    TextFormField(
+                      controller: _emailController,
+                      textInputAction: TextInputAction.next,
+                      style: const TextStyle(color: Colors.black),
+                      decoration: const InputDecoration(
+                        hintText: "Email",
+                        hintStyle: TextStyle(color: Colors.grey),
+                        prefixIcon: Icon(
+                          Icons.email_outlined,
+                          color: Colors.grey,
                         ),
                       ),
+                      validator: (String? value) {
+                        String inputText = value ?? "";
+                        if (EmailValidator.validate(inputText) == false) {
+                          return "Please enter a valid email";
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 15),
+                    TextFormField(
+                      controller: _firstNameController,
+                      textInputAction: TextInputAction.next,
+                      style: const TextStyle(color: Colors.black),
+                      decoration: const InputDecoration(
+                        hintText: "First Name",
+                        hintStyle: TextStyle(color: Colors.grey),
+                        prefixIcon: Icon(Icons.person, color: Colors.grey),
+                      ),
+                      validator: (String? value) {
+                        String inputText = value ?? "";
+                        if (inputText.isEmpty) {
+                          return "Please enter first name";
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 15),
+                    TextFormField(
+                      controller: _lastNameController,
+                      textInputAction: TextInputAction.next,
+                      style: const TextStyle(color: Colors.black),
+                      decoration: const InputDecoration(
+                        hintText: "Last Name",
+                        hintStyle: TextStyle(color: Colors.grey),
+                        prefixIcon: Icon(Icons.person, color: Colors.grey),
+                      ),
+                      validator: (String? value) {
+                        String inputText = value ?? "";
+                        if (inputText.isEmpty) {
+                          return "Please enter last name";
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 15),
+                    TextFormField(
+                      controller: _mobileController,
+                      textInputAction: TextInputAction.next,
+                      style: const TextStyle(color: Colors.black),
+                      decoration: const InputDecoration(
+                        hintText: "Mobile Number",
+                        hintStyle: TextStyle(color: Colors.grey),
+                        prefixIcon: Icon(Icons.phone, color: Colors.grey),
+                      ),
+                      validator: (String? value) {
+                        String inputText = value ?? "";
+                        if (inputText.isEmpty) {
+                          return "Please enter mobile number";
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 15),
+                    TextFormField(
+                      controller: _passwordController,
+                      textInputAction: TextInputAction.next,
+                      style: const TextStyle(color: Colors.black),
+                      decoration: const InputDecoration(
+                        hintText: "Password",
+                        hintStyle: TextStyle(color: Colors.grey),
+                        prefixIcon: Icon(Icons.lock, color: Colors.grey),
+                      ),
+                      validator: (String? value) {
+                        String inputText = value ?? "";
+                        if (inputText.isEmpty) {
+                          return "Please enter password";
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 15),
+                    Visibility(
+                      visible: _signUpInProgress == false,
+                      replacement: Center(child: CircularProgressIndicator()),
+                      child: FilledButton(
+                        onPressed: _onTapSignUpButton,
+                        child: Text("Sign Up", style: TextStyle(fontSize: 16)),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Already have an account?"),
+                        TextButton(
+                          onPressed: _onTapSignInButton,
+                          child: Text(
+                            "Log In",
+                            style: TextStyle(
+                              color:
+                                  Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? Colors.pink
+                                  : Colors.green,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
           ),
         ),

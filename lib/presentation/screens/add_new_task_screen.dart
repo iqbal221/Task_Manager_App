@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:task_manager_apps/core/urls.dart';
-import 'package:task_manager_apps/data/service/api_caller.dart';
-import 'package:task_manager_apps/presentation/screens/main_nav_bar_screen.dart';
-import 'package:task_manager_apps/presentation/widgets/screen_background.dart';
-import 'package:task_manager_apps/presentation/widgets/snack_bar_message.dart';
+import 'package:task_pilot/core/urls.dart';
+import 'package:task_pilot/data/service/api_caller.dart';
+import 'package:task_pilot/presentation/provider/auth_controller.dart';
+import 'package:task_pilot/presentation/screens/main_nav_bar_screen.dart';
+import 'package:task_pilot/presentation/widgets/screen_background.dart';
+import 'package:task_pilot/presentation/widgets/snack_bar_message.dart';
 
 class AddNewTaskScreen extends StatefulWidget {
   const AddNewTaskScreen({super.key});
@@ -100,15 +101,36 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
     _addNewTaskInProgress = true;
     setState(() {});
 
+    // ✅ Load user data first
+    await AuthController.getUserData();
+
+    String? accessToken = AuthController.accessToken;
+
+    if (accessToken == null) {
+      showSnackBarMessage(context, "User not logged in");
+      _addNewTaskInProgress = false;
+      setState(() {});
+      return;
+    }
+
+    // ✅ Access email correctly
+    String? email = AuthController.userModel?.email;
+    print("User email: $email");
+
     Map<String, dynamic> requestBody = {
       "title": _titleTEController.text.trim(),
       "description": _descriptionTEController.text.trim(),
       "status": "New",
+      "email": email ?? '', // ✅ use email from user data
     };
 
     final ApiResponse response = await ApiCaller.postRequest(
       url: Urls.addNewTaskUrl,
       body: requestBody,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken", // ✅ important
+      },
     );
 
     _addNewTaskInProgress = false;

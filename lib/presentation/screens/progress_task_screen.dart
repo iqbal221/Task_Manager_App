@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:task_manager_apps/core/urls.dart';
-import 'package:task_manager_apps/data/model/task_model.dart';
-import 'package:task_manager_apps/data/service/api_caller.dart';
-import 'package:task_manager_apps/presentation/provider/new_task_list_provider.dart';
-import 'package:task_manager_apps/presentation/widgets/snack_bar_message.dart';
+
+import 'package:task_pilot/core/urls.dart';
+import 'package:task_pilot/data/model/task_model.dart';
+import 'package:task_pilot/data/service/api_caller.dart';
+
+import 'package:task_pilot/presentation/widgets/empty_task.dart';
+import 'package:task_pilot/presentation/widgets/snack_bar_message.dart';
 import '../widgets/task_card.dart';
 
 class ProgressTaskScreen extends StatefulWidget {
@@ -32,12 +33,11 @@ class _ProgressTaskScreenState extends State<ProgressTaskScreen> {
         child: Column(
           children: [
             Expanded(
-              child: Consumer<NewTaskListProvider>(
-                builder: (context, newTaskListProvider, _) {
-                  return Visibility(
-                    visible: _getProgressTaskInProgress == false,
-                    replacement: Center(child: CircularProgressIndicator()),
-                    child: ListView.separated(
+              child: _getProgressTaskInProgress
+                  ? Center(child: CircularProgressIndicator())
+                  : _progressTaskList.isEmpty
+                  ? EmptyTask()
+                  : ListView.separated(
                       itemCount: _progressTaskList.length,
                       itemBuilder: (context, index) {
                         return Padding(
@@ -57,9 +57,6 @@ class _ProgressTaskScreenState extends State<ProgressTaskScreen> {
                         return SizedBox(height: 2);
                       },
                     ),
-                  );
-                },
-              ),
             ),
           ],
         ),
@@ -70,18 +67,28 @@ class _ProgressTaskScreenState extends State<ProgressTaskScreen> {
   Future<void> _getAllProgressTasks() async {
     _getProgressTaskInProgress = true;
     setState(() {});
+
     final ApiResponse response = await ApiCaller.getRequest(
       url: Urls.progressTaskListUrl,
     );
-    if (response.isSuccess) {
+
+    if (response.isSuccess &&
+        response.responseData != null &&
+        response.responseData['data'] != null) {
       List<TaskModel> list = [];
+
       for (Map<String, dynamic> jsonData in response.responseData['data']) {
         list.add(TaskModel.fromJson(jsonData));
       }
+
       _progressTaskList = list;
     } else {
-      showSnackBarMessage(context, response.errorMessage!);
+      showSnackBarMessage(
+        context,
+        response.errorMessage ?? "Failed to load tasks",
+      );
     }
+
     _getProgressTaskInProgress = false;
     setState(() {});
   }

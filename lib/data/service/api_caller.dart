@@ -6,14 +6,13 @@ import 'package:task_pilot/presentation/provider/auth_controller.dart';
 class ApiCaller {
   static final Logger _logger = Logger();
 
-  static Future<ApiResponse> getRequest({
-    required String url,
-    Map<String, String>? headers,
-  }) async {
+  static Future<ApiResponse> getRequest({required String url}) async {
     try {
       Uri uri = Uri.parse(url);
 
-      headers ??= {"Content-Type": "application/json"};
+      Map<String, String> headers;
+
+      headers = {"Content-Type": "application/json"};
 
       final token = AuthController.accessToken;
       if (token != null) {
